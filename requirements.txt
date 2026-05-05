@@ -1,0 +1,10 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+yt-dlp>=2024.11.18
+demucs>=4.0.1
+basic-pitch>=0.3.2
+boto3>=1.35.0
+python-multipart>=0.0.9
+music21>=9.1.0
+python-dotenv>=1.0.0
+runpod>=1.9.0
