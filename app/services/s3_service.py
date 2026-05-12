@@ -6,7 +6,7 @@ import asyncio
 
 AWS_BUCKET = os.getenv("AWS_BUCKET_NAME", "inst-musicxml")
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
-PRESIGNED_URL_EXPIRY = 600
+PRESIGNED_URL_EXPIRY = 604800  # BUG-07: 7일 (600초→604800초), DB에 저장되므로 충분한 TTL
 
 _s3 = None
 

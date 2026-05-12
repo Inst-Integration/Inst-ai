@@ -27,7 +27,7 @@ def get_loaded_model():
 
 
 async def separate_audio(audio_path: str, instrument: str = "bass") -> str:
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()  # BUG-21: get_event_loop deprecated
     return await loop.run_in_executor(None, _separate, audio_path, instrument)
 
 
