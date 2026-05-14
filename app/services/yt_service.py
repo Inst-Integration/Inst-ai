@@ -25,7 +25,7 @@ async def download_audio(youtube_url: str) -> str:
         "no_warnings": True,
     }
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     await loop.run_in_executor(None, _download, ydl_opts, youtube_url)
 
     return output_path + ".wav"

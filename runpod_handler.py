@@ -1,4 +1,3 @@
-import asyncio
 import os
 import runpod
 from app.services.demucs_service import load_model as load_demucs
@@ -13,27 +12,25 @@ load_demucs()
 load_pitch()
 
 
-def handler(job):
+async def handler(job):
     input_data = job["input"]
     youtube_url = input_data.get("youtube_url")
-    instrument = input_data.get("instrument", "bass").lower()  # BUG-06: 소문자 정규화
+    instrument = input_data.get("instrument", "bass").lower()
 
     if not youtube_url:
         return {"error": "youtube_url required"}
 
     audio_path = bass_path = xml_path = None
-    loop = asyncio.new_event_loop()
     try:
-        audio_path = loop.run_until_complete(download_audio(youtube_url))
-        bass_path  = loop.run_until_complete(separate_audio(audio_path, instrument))
-        xml_path   = loop.run_until_complete(audio_to_musicxml(bass_path, instrument))
-        url, expires = loop.run_until_complete(upload_and_get_url(xml_path))
-        return {"musicXmlUrl": url, "expires_in": expires}  # BUG-05: camelCase 키
+        audio_path = await download_audio(youtube_url)
+        bass_path  = await separate_audio(audio_path, instrument)
+        xml_path   = await audio_to_musicxml(bass_path, instrument)
+        url, expires = await upload_and_get_url(xml_path)
+        return {"musicXmlUrl": url, "expires_in": expires}
     except Exception as e:
         return {"error": str(e)}
     finally:
-        loop.close()
-        for path in [audio_path, bass_path, xml_path]:  # BUG-20: 임시 파일 정리
+        for path in [audio_path, bass_path, xml_path]:
             try:
                 if path and os.path.exists(path):
                     os.remove(path)
