@@ -29,7 +29,7 @@ async def download_audio(youtube_url: str) -> str:
     output_path = os.path.join(tmp_dir, "audio")
 
     ydl_opts = {
-        "format": "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio/best",
+        "format": "bestaudio/best",
         "outtmpl": output_path,
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
